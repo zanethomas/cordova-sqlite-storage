@@ -51,28 +51,47 @@
 
         NSString *nosync = [libs stringByAppendingPathComponent:@"LocalDatabase"];
         NSError *err;
+
+        // GENERAL NOTE: no `nosync` directory path entry to be added
+        // to appDBPaths map in case of any isses creating the
+        // required directory or setting the resource value for
+        // NSURLIsExcludedFromBackupKey
+        //
+        // This is to avoid potential for issue raised here:
+        // https://github.com/xpbrew/cordova-sqlite-storage/issues/907
+
         if ([[NSFileManager defaultManager] fileExistsAtPath: nosync])
         {
-            DLog(@"no cloud sync at path: %@", nosync);
-            [appDBPaths setObject: nosync forKey:@"nosync"];
+            DLog(@"no cloud sync directory already exists at path: %@", nosync);
         }
         else
         {
             if ([[NSFileManager defaultManager] createDirectoryAtPath: nosync withIntermediateDirectories:NO attributes: nil error:&err])
             {
-                NSURL *nosyncURL = [ NSURL fileURLWithPath: nosync];
-                if (![nosyncURL setResourceValue: [NSNumber numberWithBool: YES] forKey: NSURLIsExcludedFromBackupKey error: &err])
-                {
-                    DLog(@"IGNORED: error setting nobackup flag in LocalDatabase directory: %@", err);
-                }
-                DLog(@"no cloud sync at path: %@", nosync);
-                [appDBPaths setObject: nosync forKey:@"nosync"];
+                DLog(@"no cloud sync directory created with path: %@", nosync);
             }
             else
             {
-                // fallback:
-                DLog(@"WARNING: error adding LocalDatabase directory: %@", err);
-                [appDBPaths setObject: libs forKey:@"nosync"];
+                // STOP HERE & LOG WITH INTERNAL PLUGIN ERROR:
+                NSLog(@"INTERNAL PLUGIN ERROR: could not create no cloud sync directory at path: %@", nosync);
+                return;
+            }
+        }
+
+        {
+            {
+                // Set the resource value for NSURLIsExcludedFromBackupKey
+                NSURL *nosyncURL = [ NSURL fileURLWithPath: nosync];
+                if (![nosyncURL setResourceValue: [NSNumber numberWithBool: YES] forKey: NSURLIsExcludedFromBackupKey error: &err])
+                {
+                    // STOP HERE & LOG WITH INTERNAL PLUGIN ERROR:
+                    NSLog(@"INTERNAL PLUGIN ERROR: error setting nobackup flag in LocalDatabase directory: %@", err);
+                    return;
+                }
+
+                // now ready to add `nosync` entry to appDBPaths:
+                DLog(@"no cloud sync at path: %@", nosync);
+                [appDBPaths setObject: nosync forKey:@"nosync"];
             }
         }
     }
