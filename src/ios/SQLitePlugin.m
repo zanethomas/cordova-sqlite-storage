@@ -99,10 +99,16 @@
 
 -(id) getDBPath:(NSString *)dbFile at:(NSString *)atkey {
     if (dbFile == NULL) {
+        // INTERNAL PLUGIN ERROR:
         return NULL;
     }
 
     NSString *dbdir = [appDBPaths objectForKey:atkey];
+    if (dbdir == NULL) {
+        // INTERNAL PLUGIN ERROR:
+        return NULL;
+    }
+
     NSString *dbPath = [dbdir stringByAppendingPathComponent: dbFile];
     return dbPath;
 }
@@ -262,6 +268,14 @@
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"INTERNAL PLUGIN ERROR: You must specify database path"];
     } else {
         NSString *dbPath = [self getDBPath:dbFileName at:dblocation];
+
+        if (dbPath == NULL) {
+            // INTERNAL PLUGIN ERROR - NOT EXPECTED:
+            NSLog(@"INTERNAL PLUGIN ERROR (NOT EXPECTED): delete with no valid database path found");
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString: @"INTERNAL PLUGIN ERROR: delete with no valid database path found"];
+            [self.commandDelegate sendPluginResult:pluginResult callbackId: command.callbackId];
+            return;
+        }
 
         if ([[NSFileManager defaultManager]fileExistsAtPath:dbPath]) {
             DLog(@"delete full db path: %@", dbPath);
