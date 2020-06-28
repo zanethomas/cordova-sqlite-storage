@@ -25,13 +25,13 @@
         <!-- Cordova >= 3.0.0 -->
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="SQLitePlugin">
-                <param name="android-package" value="io.sqlc.SQLitePlugin"/>
+                <param name="android-package" value="zt.sqlc.SQLitePlugin"/>
             </feature>
         </config-file>
 
-        <source-file src="src/android/io/sqlc/SQLitePlugin.java" target-dir="src/io/sqlc"/>
-        <source-file src="src/android/io/sqlc/SQLiteAndroidDatabase.java" target-dir="src/io/sqlc"/>
-        <source-file src="src/android/io/sqlc/SQLiteConnectorDatabase.java" target-dir="src/io/sqlc"/>
+        <source-file src="src/android/io/sqlc/SQLitePlugin.java" target-dir="src/zt/sqlc"/>
+        <source-file src="src/android/io/sqlc/SQLiteAndroidDatabase.java" target-dir="src/zt/sqlc"/>
+        <source-file src="src/android/io/sqlc/SQLiteConnectorDatabase.java" target-dir="src/zt/sqlc"/>
 
         <!-- Android-sqlite-connector [jar]: -->
         <lib-file src="node_modules/cordova-sqlite-storage-dependencies/libs/sqlite-connector.jar" />
