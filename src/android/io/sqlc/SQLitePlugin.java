@@ -4,7 +4,7 @@
  * Copyright (c) 2010, IBM Corporation
  */
 
-package io.sqlc;
+package zt.sqlc;
 
 import android.util.Log;
 
