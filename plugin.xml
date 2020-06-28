@@ -29,9 +29,9 @@
             </feature>
         </config-file>
 
-        <source-file src="src/android/io/sqlc/SQLitePlugin.java" target-dir="src/zt/sqlc"/>
-        <source-file src="src/android/io/sqlc/SQLiteAndroidDatabase.java" target-dir="src/zt/sqlc"/>
-        <source-file src="src/android/io/sqlc/SQLiteConnectorDatabase.java" target-dir="src/zt/sqlc"/>
+        <source-file src="src/android/zt/sqlc/SQLitePlugin.java" target-dir="src/zt/sqlc"/>
+        <source-file src="src/android/zt/sqlc/SQLiteAndroidDatabase.java" target-dir="src/zt/sqlc"/>
+        <source-file src="src/android/zt/sqlc/SQLiteConnectorDatabase.java" target-dir="src/zt/sqlc"/>
 
         <!-- Android-sqlite-connector [jar]: -->
         <lib-file src="node_modules/cordova-sqlite-storage-dependencies/libs/sqlite-connector.jar" />
